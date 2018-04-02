@@ -9,7 +9,7 @@ class Alex
 
     # read file
     input_buffer = File.read("0.c")
-    puts input_buffer
+    # puts input_buffer
 
     private
     def add_token(code, ct, line, column)
@@ -26,20 +26,6 @@ class Alex
     def get_next_token
         state = 0
 
-        loop do
-            case state
-            when 0
-                # ceva
-            when 1
-                # altceva
-            when 2
-
-            when 3
-
-            else
-                puts "ce???"
-            end
-        end
     end
 
     public

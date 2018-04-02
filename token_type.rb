@@ -43,12 +43,30 @@ module TokenType
     TK_GREATER = :GREATER
     TK_GREATEREQ = :GREATEREQ
 
+    $space = lambda {|x| ' \t\n\r'.include?(x)}
+    $letter = lambda {|x| 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'.include?(x)}
+    $id = lambda {|x| 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789'.include?(x)}
+    $digit = lambda {|x| '0123456789'.include?(x)}
+    $nonzero_digit = lambda {|x| '123456789'.include?(x)}
+    $e = lambda {|x| 'Ee'.include?(x)}
+    $plus_minus = lambda {|x| '+-'.include?(x)}
+    $zero_to_seven = lambda {|x| '01234567'.include?(x)}
+    $eight_nine = lambda {|x| '89'.include?(x)}
+    $hexa = lambda {|x| '0123456789abcdefABCDEF'.include?(x)}
+    $not_asterisk = lambda {|x| x != '*'}
+    $new_line = lambda {|x| '\n\r\0'.include?(x)}
+    $not_new_line = lambda {|x| !('\n\r\0'.include?(x))}
+    $not_end_com = lambda {|x| x != '/'}
+    $special_char = lambda {|x| 'abfnrtv\'?"\\0'.include?(x)}
+    $not_quote = lambda {|x| x != '\'\\'}
+    $not_double_quote = lambda {|x| x != '"\\'}
+
     TRANSITIONS = {
         # space
-        [0, :space] => [0, nil],
+        [0, $space] => [0, nil],
         # ID
-        [0, :letter] => [1, nil],
-        [1, :letter] => [1, nil],
+        [0, $letter] => [1, nil],
+        [1, $id] => [1, nil],
         [1, nil] => [2, TK_ID],
         # ASSIGN & EQUAL
         [0, '='] => [3, nil],
@@ -100,21 +118,65 @@ module TokenType
         [0, '/'] => [31, nil],
         [31, nil] => [32, TK_DIV],
         [31, '/'] => [33, nil],
-        [33, :not_new_line] => [33, nil],
-        [33, :new_line] => [0, nil],
+        [33, $not_new_line] => [33, nil],
+        [33, $new_line] => [0, nil],
         [31, '*'] => [34, nil],
-        [34, :not_asterisk] => [34, nil],
+        [34, $not_asterisk] => [34, nil],
         [34, '*'] => [35, nil],
         [35, '*'] => [35, nil],
-        [35, :not_fin_com] => [34, nil],
+        [35, $not_end_com] => [34, nil],
         [35, '/'] => [0, nil],
         # CT_CHAR
+        [0, '\''] => [36, nil],
+        [36, '\\'] => [37, nil],
+        [37, $special_char] => [38, nil],
+        [36, $not_quote] => [38, nil],
+        [38, '\''] => [39, TK_CT_CHAR],
         # CT_STRING
+        [0, '"'] => [40, nil],
+        [40, nil] => [41, nil],
+        [41, $special_char] => [42, nil],
+        [40, $not_double_quote] => [42, nil],
+        [42, nil] => [40, nil],
+        [40, '"'] => [43, TK_CT_STRING],
         # CT_INT
+        [0, $nonzero_digit] => [44, nil],
+        [44, $digit] => [44, nil],
+        [44, nil] => [45, TK_CT_INT],
+        [0, '0'] => [46, nil],
+        [46, nil] => [47, nil],
+        [47, $zero_to_seven] => [47, nil],
+        [47, nil] => [45, TK_CT_INT],
+        [46, 'x'] => [48, nil],
+        [48, $hexa] => [49, nil],
+        [49, $hexa] => [49, nil],
+        [49, nil] => [45, TK_CT_INT],
         # CT_REAL
+        [44, '.'] => [50, nil],
+        [46, '.'] => [50, nil],
+        [46, $eight_nine] => [51, nil],
+        [47, $eight_nine] => [51, nil],
+        [44, $e] => [52, nil],
+        [50, $digit] => [51, nil],
+        [51, $digit] => [51, nil],
+        [51, nil] => [55, TK_CT_REAL],
+        [51, $e] => [52, nil],
+        [52, $plus_minus] => [53, nil],
+        [53, $digit] => [54, nil],
+        [52, $digit] => [54, nil],
+        [54, $digit] => [54, nil],
+        [54, nil] => [55, TK_CT_REAL]
     }
 
     def transition(current_state, ch)
+        TRANSITIONS.each {|key, value|
+            next if key[0] != current_state
 
+            if key[1].respond_to? :call
+                key[1].call(ch) ? return value : next
+            else
+                key[1] == ch ? return value : next
+            end
+        }
     end
 end
