@@ -1,13 +1,16 @@
-class Token
-    # code -> code/name
-    # ct -> used for ID, CT_STRING (text), CT_INT, CT_CHAR (int), CT_REAL (double)
-    # line -> the line in the input file
-    attr_accessor @code, @ct, @line, @column
+require_relative 'token_type'
 
-    def initialize(code, ct, line, column)
-        @code = code
-        @ct = ct
-        @line = line
-        @column = column
-    end
+class Token
+  # code -> code/name
+  # ct -> used for ID, CT_STRING (text), CT_INT, CT_CHAR (int), CT_REAL (double)
+  # line -> the line in the input file
+  # column -> the column in the input file
+  attr_accessor :code, :ct, :line, :column
+
+  def initialize(code, ct, line, column)
+    @code   = code
+    @ct     = ct
+    @line   = line
+    @column = column
+  end
 end
