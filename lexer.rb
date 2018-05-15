@@ -1,24 +1,26 @@
 require_relative 'token'
 require_relative 'token_type'
 
-class Alex
+class Lexer
   # state - current state
   # line - current line in file
   # column - current column in file
   def initialize(input_file)
-    @tokens       = Array.new
-    @input_buffer = File.read(input_file) << "\n"
-    @state        = 0
-    @line         = 1
-    @column       = 1
+    @tokens  = Array.new
+    @scanner = File.read(input_file) << "\n"
+    @state   = 0
+    @line    = 1
+    @column  = 1
   end
 
   # show_tokens method
   def to_s
     str = ""
+
     @tokens.each do |tk|
       str += "#{tk.code}: #{tk.ct} (line: #{tk.line}, column: #{tk.column})\n"
     end
+
     str
   end
 
@@ -98,6 +100,7 @@ class Alex
       token_ct = token_ct[1...-1]
       tmp      = ""
       index    = 0
+
       while index < token_ct.length do
         if token_ct[index].eql?('\\')
           tmp << convert_escape_char(token_ct[index..index + 1])
@@ -107,19 +110,20 @@ class Alex
           index += 1
         end
       end
+
       return tmp
     else
       return token_ct
     end
   end
 
-  def get_tokens
+  def tokenizer
     # token_start - the first character in the current token
     # token_ct - used for ID, CT_STRING (text), CT_INT, CT_CHAR (int), CT_REAL (double)
     token_start = [@line, @column]
     token_ct    = ""
 
-    @input_buffer.each_char do |c|
+    @scanner.each_char do |c|
       @column  += 1
       consumed = false
 
@@ -163,6 +167,6 @@ class Alex
   end
 end
 
-file = Alex.new("8.c")
-file.get_tokens
+file = Lexer.new("8.c")
+file.tokenizer
 puts file
