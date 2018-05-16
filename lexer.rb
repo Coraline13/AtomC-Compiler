@@ -1,16 +1,25 @@
-require_relative 'token'
-require_relative 'token_type'
+require_relative 'tokenable'
 
 class Lexer
+  # code -> code/name
+  # ct -> used for ID, CT_STRING (text), CT_INT, CT_CHAR (int), CT_REAL (double)
+  # line -> the line in the input file
+  # column -> the column in the input file
+  Token = Struct.new(:code, :ct, :line, :column)
+
   # state - current state
   # line - current line in file
   # column - current column in file
   def initialize(input_file)
-    @tokens  = Array.new
+    abort("Input file not found!") unless File.file?(input_file)
+    f        = File.new(input_file)
     @scanner = File.read(input_file) << "\n"
-    @state   = 0
-    @line    = 1
-    @column  = 1
+    f.close
+
+    @tokens = Array.new
+    @state  = 0
+    @line   = 1
+    @column = 1
   end
 
   # show_tokens method
@@ -28,29 +37,29 @@ class Lexer
   def convert_id(token_ct)
     case token_ct
     when "break"
-      return TokenType::TK_BREAK
+      return Tokenable::TK_BREAK
     when "char"
-      return TokenType::TK_CHAR
+      return Tokenable::TK_CHAR
     when "double"
-      return TokenType::TK_DOUBLE
+      return Tokenable::TK_DOUBLE
     when "else"
-      return TokenType::TK_ELSE
+      return Tokenable::TK_ELSE
     when "for"
-      return TokenType::TK_FOR
+      return Tokenable::TK_FOR
     when "if"
-      return TokenType::TK_IF
+      return Tokenable::TK_IF
     when "int"
-      return TokenType::TK_INT
+      return Tokenable::TK_INT
     when "return"
-      return TokenType::TK_RETURN
+      return Tokenable::TK_RETURN
     when "struct"
-      return TokenType::TK_STRUCT
+      return Tokenable::TK_STRUCT
     when "void"
-      return TokenType::TK_VOID
+      return Tokenable::TK_VOID
     when "while"
-      return TokenType::TK_WHILE
+      return Tokenable::TK_WHILE
     else
-      return TokenType::TK_ID
+      return Tokenable::TK_ID
     end
   end
 
@@ -81,7 +90,7 @@ class Lexer
   # converts string to specific token type
   def create_ct(token_type, token_ct)
     case token_type
-    when TokenType::TK_CT_INT
+    when Tokenable::TK_CT_INT
       if token_ct.start_with?("0")
         if token_ct.start_with?("0x")
           return token_ct.to_i(16)
@@ -91,12 +100,12 @@ class Lexer
       else
         return token_ct.to_i
       end
-    when TokenType::TK_CT_REAL
+    when Tokenable::TK_CT_REAL
       return token_ct.to_f
-    when TokenType::TK_CT_CHAR
+    when Tokenable::TK_CT_CHAR
       token_ct = token_ct[1...-1]
       return self.convert_escape_char(token_ct)
-    when TokenType::TK_CT_STRING
+    when Tokenable::TK_CT_STRING
       token_ct = token_ct[1...-1]
       tmp      = ""
       index    = 0
@@ -133,7 +142,7 @@ class Lexer
           token_ct    = ""
         end
 
-        result, consumed = TokenType.transition(@state, c)
+        result, consumed = Tokenable.transition(@state, c)
 
         if consumed
           token_ct += c
@@ -146,7 +155,7 @@ class Lexer
         if tmp.nil?
           @state = result[0]
         else
-          tmp = self.convert_id(token_ct) if tmp.eql?(TokenType::TK_ID)
+          tmp = self.convert_id(token_ct) if tmp.eql?(Tokenable::TK_ID)
           @tokens.push(Token.new(tmp.to_s, self.create_ct(tmp, token_ct), token_start[0], token_start[1]))
           @state = 0
         end
@@ -158,7 +167,7 @@ class Lexer
       end
     end
 
-    @tokens.push(Token.new(TokenType::TK_END, "", @line, @column))
+    @tokens.push(Token.new(Tokenable::TK_END, "", @line, @column))
   end
 
   # err & token_err functions
@@ -167,6 +176,6 @@ class Lexer
   end
 end
 
-file = Lexer.new("8.c")
+file = Lexer.new("tests/8.c")
 file.tokenizer
 puts file

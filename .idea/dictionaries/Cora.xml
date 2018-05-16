@@ -11,6 +11,7 @@
       <w>lesseq</w>
       <w>noteq</w>
       <w>rbracket</w>
+      <w>tokenable</w>
     </words>
   </dictionary>
 </component>

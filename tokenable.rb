@@ -1,4 +1,4 @@
-module TokenType
+module Tokenable
   TK_ID = :ID
 
   TK_BREAK  = :BREAK
