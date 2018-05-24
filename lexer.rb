@@ -7,6 +7,8 @@ class Lexer
   # column -> the column in the input file
   Token = Struct.new(:code, :ct, :line, :column)
 
+  attr_reader :tokens
+
   # state - current state
   # line - current line in file
   # column - current column in file
@@ -126,7 +128,7 @@ class Lexer
     end
   end
 
-  def tokenizer
+  def tokenize
     # token_start - the first character in the current token
     # token_ct - used for ID, CT_STRING (text), CT_INT, CT_CHAR (int), CT_REAL (double)
     token_start = [@line, @column]
@@ -156,7 +158,7 @@ class Lexer
           @state = result[0]
         else
           tmp = self.convert_id(token_ct) if tmp.eql?(Tokenable::TK_ID)
-          @tokens.push(Token.new(tmp.to_s, self.create_ct(tmp, token_ct), token_start[0], token_start[1]))
+          @tokens.push(Token.new(tmp, self.create_ct(tmp, token_ct), token_start[0], token_start[1]))
           @state = 0
         end
       end
@@ -175,7 +177,3 @@ class Lexer
     abort("Error in line #{line}, column #{column}!")
   end
 end
-
-file = Lexer.new("tests/8.c")
-file.tokenizer
-puts file
