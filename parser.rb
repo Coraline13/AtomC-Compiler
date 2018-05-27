@@ -1,80 +1,74 @@
 require_relative 'tokenable'
 require_relative 'ast'
+require_relative 'rules'
+require_relative 'parser_exception'
 
 module Parser
   def self.parse(tokens)
     @tokens = tokens
     @index  = 0
     # TODO: return nod principal
-    return expr_primary
+    begin
+      return Rules.expr_primary
+    rescue ParserException => e
+      puts e
+      puts e.backtrace
+    end
   end
 
-  def self.consume(code)
+  def self.consume(code, msg = nil)
     if @tokens[@index].code == code
-      @last_token = @tokens[@index]
-      @index      += 1
-      return true
+      @index += 1
+      return @tokens[@index - 1]
     end
-    false
+    raise ParserException.new(@tokens[@index], msg) if msg
   end
 
-  # unit: ( declStruct | declFunc | declVar )* END
+  # implements *
+  def self.parse_many(optional = true, &rule)
+    results = Array.new
+    loop do
+      old_index = @index
+      begin
+        results << rule.call
+      rescue ParserException
+        @index = old_index
 
-  # typeBase: INT | DOUBLE | CHAR | STRUCT ID
-  def type_base
-    start_index = @index
-    if consume(Tokenable::TK_INT)
-      type = Tokenable::TK_INT
-    end
-    if consume(Tokenable::TK_DOUBLE)
-      type = Tokenable::TK_DOUBLE
-    end
-    if consume(Tokenable::TK_CHAR)
-      type = Tokenable::TK_CHAR
-    end
-    if consume(Tokenable::TK_STRUCT)
-      type = Tokenable::TK_STRUCT
-    end
-    type
-  end
-
-  # exprOr: exprOr OR exprAnd | exprAnd
-  # def expr_or
-  #   if expr_and
-  #     if expr_or1
-  #       true
-  #     end
-  #   end
-  #   false
-  # end
-
-  # exprPrimary: ID ( LPAR ( expr ( COMMA expr )* )? RPAR )?
-  # | CT_INT
-  # | CT_REAL
-  # | CT_CHAR
-  # | CT_STRING
-  # | LPAR expr RPAR
-  def self.expr_primary
-    start_index = @index
-    if consume(Tokenable::TK_ID)
-      id = @last_token.ct
-      if consume(Tokenable::TK_LPAR)
-        params = Array.new
-        if true # TODO: expr
-          params << 1 # TODO: adaugat nod in lista
-          while tokens[index].code == Tokenable::TK_COMMA
-            index += 1
-            if true # TODO: expr
-              params << 1 # TODO: adaugat nod in lista
-            end
-          end
+        if !optional && results.empty?
+          raise
         end
-        if tokens[index].code == Tokenable::TK_RPAR
-          return true
-        end
+
+        break
       end
-      VariableExpression.new(id)
     end
-    # return bla if consume(Tokenable::TK_CT_INT)
+    return results
+  end
+
+  # implements ?
+  def self.parse_maybe(&rule)
+    old_index = @index
+    begin
+      return rule.call
+    rescue ParserException
+      @index = old_index
+      return nil
+    end
+  end
+
+  # implements |
+  def self.parse_any(*rules)
+    exceptions = Array.new
+    old_index  = @index
+
+    rules.each { |rule|
+      begin
+        return rule.call
+      rescue ParserException => e
+        exceptions << e
+        @index = old_index
+      end
+    }
+
+    raise MultiParserException.new(exceptions)
   end
 end

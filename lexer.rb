@@ -32,7 +32,7 @@ class Lexer
       str += "#{tk.code}: #{tk.ct} (line: #{tk.line}, column: #{tk.column})\n"
     end
 
-    str
+    return str
   end
 
   # converts ID to specific type
