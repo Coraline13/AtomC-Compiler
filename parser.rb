@@ -9,7 +9,7 @@ module Parser
     @index  = 0
     # TODO: return nod principal
     begin
-      return Rules.expr_primary
+      return Rules.expr_eq
     rescue ParserException => e
       puts e
       puts e.backtrace
@@ -60,14 +60,14 @@ module Parser
     exceptions = Array.new
     old_index  = @index
 
-    rules.each { |rule|
+    rules.each do |rule|
       begin
         return rule.call
       rescue ParserException => e
         exceptions << e
         @index = old_index
       end
-    }
+    end
 
     raise MultiParserException.new(exceptions)
   end

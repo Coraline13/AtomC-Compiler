@@ -68,12 +68,80 @@ class AssignExpression < BinaryExpression
 
 end
 
+class OrExpression < BinaryExpression
+
+end
+
+class AndExpression < BinaryExpression
+
+end
+
+class EqualExpression < BinaryExpression
+  def to_s
+    return "#{lhs}==#{rhs}"
+  end
+end
+
+class NoteqExpression < BinaryExpression
+  def to_s
+    return "#{lhs}!=#{rhs}"
+  end
+end
+
+class LessExpression < BinaryExpression
+  def to_s
+    return "#{lhs}<#{rhs}"
+  end
+end
+
+class LesseqExpression < BinaryExpression
+  def to_s
+    return "#{lhs}<=#{rhs}"
+  end
+end
+
+class GreaterExpression < BinaryExpression
+  def to_s
+    return "#{lhs}>#{rhs}"
+  end
+end
+
+class GreatereqExpression < BinaryExpression
+  def to_s
+    return "#{lhs}>=#{rhs}"
+  end
+end
+
+class AddExpression < BinaryExpression
+  def to_s
+    return "#{lhs}+#{rhs}"
+  end
+end
+
+class SubExpression < BinaryExpression
+  def to_s
+    return "#{lhs}-#{rhs}"
+  end
+end
+
+class MulExpression < BinaryExpression
+  def to_s
+    return "#{lhs}*#{rhs}"
+  end
+end
+
+class DivExpression < BinaryExpression
+  def to_s
+    return "#{lhs}/#{rhs}"
+  end
+end
+
 class FunctionCallExpression < Expression
   attr_reader :function_name, :args
 
   def initialize(function_name, args)
     @function_name = function_name
-    @args = args
+    @args          = args
   end
 
   def to_s
