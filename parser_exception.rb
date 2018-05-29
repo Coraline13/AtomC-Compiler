@@ -12,3 +12,9 @@ class MultiParserException < ParserException
     super(nil, "Failed to parse any of:\n\t#{exceptions.join("\n\t")}")
   end
 end
+
+class ParserSyntaxError < Exception
+  def initialize(exception)
+    super(exception.to_s)
+  end
+end

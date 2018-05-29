@@ -1,7 +1,7 @@
 require_relative 'lexer'
 require_relative 'parser'
 
-lexer = Lexer.new("tests/test.c")
+lexer = Lexer.new("tests/9.c")
 lexer.tokenize
 puts lexer
 

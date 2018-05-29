@@ -7,21 +7,30 @@ module Parser
   def self.parse(tokens)
     @tokens = tokens
     @index  = 0
-    # TODO: return nod principal
+
     begin
-      return Rules.expr_eq
+      return Rules.unit
     rescue ParserException => e
       puts e
       puts e.backtrace
+    rescue ParserSyntaxError => err
+      puts err
+      puts err.backtrace
     end
   end
 
-  def self.consume(code, msg = nil)
+  def self.consume(code, msg = nil, syntax_error = false)
     if @tokens[@index].code == code
       @index += 1
       return @tokens[@index - 1]
     end
-    raise ParserException.new(@tokens[@index], msg) if msg
+    if msg
+      exception = ParserException.new(@tokens[@index], msg)
+      if syntax_error
+        raise ParserSyntaxError.new(exception)
+      end
+      raise exception
+    end
   end
 
   # implements *
@@ -48,10 +57,10 @@ module Parser
   def self.parse_maybe(&rule)
     old_index = @index
     begin
-      return rule.call
+      return rule.call, true
     rescue ParserException
       @index = old_index
-      return nil
+      return nil, false
     end
   end
 

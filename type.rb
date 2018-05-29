@@ -1,5 +1,5 @@
 class Type
-  attr_reader :is_array, :array_size
+  attr_accessor :is_array, :array_size
 
   def initialize(is_array, array_size = nil)
     @is_array   = is_array
@@ -8,6 +8,12 @@ class Type
 
   def array_to_s
     is_array ? "[#{array_size}]" : ""
+  end
+end
+
+class VoidType < Type
+  def initialize()
+    super(false)
   end
 end
 
@@ -38,5 +44,14 @@ FLOAT = FloatType.new(false)
 CHAR  = CharType.new(false)
 
 class StructType < Type
+  attr_reader :struct_name
 
+  def initialize(struct_name, is_array, array_size = nil)
+    super(is_array, array_size)
+    @struct_name = struct_name
+  end
+
+  def to_s
+    return "struct#{array_to_s}"
+  end
 end
