@@ -15,6 +15,10 @@ class VoidType < Type
   def initialize()
     super(false)
   end
+
+  def to_s
+    return "void"
+  end
 end
 
 class PrimitiveType < Type

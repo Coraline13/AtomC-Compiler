@@ -1,17 +1,19 @@
+struct Pt{
+	int x,y;
+	};
 
-int sum()
+struct Pt		points[20/4+5];
+
+int		count()
 {
-	int	 i,v[5],s;
-	s=0;
-
-	return s;
+	int		i,n;
+	for(i=n=0;i<10;i=i+1){
+		if(points[i].x>=0&&points[i].y>=0)n=n+1;
+		}
+	return n;
 }
 
 void main()
 {
-	int		i,s;
-	for(i=0;i 1000000;i=i+1)
-	s=sum();
-	put_i(s);
+	put_i(count());
 }
-
