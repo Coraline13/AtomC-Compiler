@@ -139,7 +139,7 @@ module Rules
   #   | RETURN expr? SEMICOLON
   #   | expr? SEMICOLON
   def self.stm
-    compounds = Parser.parse_any -> do
+    Parser.parse_any -> do
       stm_compound
     end, -> do
       Parser.consume(Tokenable::TK_IF, "Expected 'if'!")
@@ -192,8 +192,8 @@ module Rules
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", expression != nil)
+      return ExpressionStatement.new(expression)
     end
-    # TODO: tot
   end
 
   # stmCompound: LACC ( declVar | stm )* RACC
@@ -211,29 +211,29 @@ module Rules
   end
 
   # expr: exprAssign
-  def self.expr
-    expr_assign
+  def self.expr(syntax_error = false)
+    expr_assign(syntax_error)
   end
 
   # exprAssign: exprUnary ASSIGN exprAssign | exprOr
-  def self.expr_assign
+  def self.expr_assign(syntax_error = false)
     Parser.parse_any -> do
       lhs = expr_unary
       Parser.consume(Tokenable::TK_ASSIGN, "Expected '=!'")
-      rhs = expr_assign
+      rhs = expr_assign(true)
       return AssignExpression.new(lhs, rhs)
     end, -> do
-      expr_or
+      expr_or(syntax_error)
     end
   end
 
   # exprOr: exprOr OR exprAnd | exprAnd
   # => exprOr: exprAnd ( ( OR exprAnd )* )?
-  def self.expr_or
-    lhs         = expr_and
+  def self.expr_or(syntax_error = false)
+    lhs         = expr_and(syntax_error)
     expressions = Parser.parse_many do
       Parser.consume(Tokenable::TK_OR, "Expected '||'!")
-      expr_and
+      expr_and(true)
     end
 
     expressions.each do |expression|
@@ -245,11 +245,11 @@ module Rules
 
   # exprAnd: exprAnd AND exprEq | exprEq
   # => exprAnd: exprEq ( ( AND exprEq )* )?
-  def self.expr_and
-    lhs         = expr_eq
+  def self.expr_and(syntax_error = false)
+    lhs         = expr_eq(syntax_error)
     expressions = Parser.parse_many do
       Parser.consume(Tokenable::TK_AND, "Expected '&&'!")
-      expr_eq
+      expr_eq(true)
     end
 
     expressions.each do |expression|
@@ -261,15 +261,15 @@ module Rules
 
   # exprEq: exprEq ( EQUAL | NOTEQ ) exprRel | exprRel
   # => exprEq: exprRel ( ( ( EQUAL | NOTEQ ) exprRel )* )?
-  def self.expr_eq
-    lhs         = expr_rel
+  def self.expr_eq(syntax_error = false)
+    lhs         = expr_rel(syntax_error)
     expressions = Parser.parse_many do
       tk = Parser.parse_any -> do
         Parser.consume(Tokenable::TK_EQUAL, "Expected '=='!")
       end, -> do
         Parser.consume(Tokenable::TK_NOTEQ, "Expected '!='!")
       end
-      [tk, expr_rel]
+      [tk, expr_rel(true)]
     end
 
     expressions.each do |tk, expression|
@@ -285,8 +285,8 @@ module Rules
 
   # exprRel: exprRel ( LESS | LESSEQ | GREATER | GREATEREQ ) exprAdd | exprAdd
   # => exprRel: exprAdd ( ( ( LESS | LESSEQ | GREATER | GREATEREQ ) exprAdd )* )?
-  def self.expr_rel
-    lhs         = expr_add
+  def self.expr_rel(syntax_error = false)
+    lhs         = expr_add(syntax_error)
     expressions = Parser.parse_many do
       tk = Parser.parse_any -> do
         Parser.consume(Tokenable::TK_LESS, "Expected '<'!")
@@ -297,7 +297,7 @@ module Rules
       end, -> do
         Parser.consume(Tokenable::TK_GREATEREQ, "Expected '>='")
       end
-      [tk, expr_add]
+      [tk, expr_add(true)]
     end
 
     expressions.each do |tk, expression|
@@ -317,15 +317,15 @@ module Rules
 
   # exprAdd: exprAdd ( ADD | SUB ) exprMul | exprMul
   # => exprAdd: exprMul ( ( ( ADD | SUB ) exprMul )* )?
-  def self.expr_add
-    lhs         = expr_mul
+  def self.expr_add(syntax_error = false)
+    lhs         = expr_mul(syntax_error)
     expressions = Parser.parse_many do
       tk = Parser.parse_any -> do
         Parser.consume(Tokenable::TK_ADD, "Expected '+'!")
       end, -> do
         Parser.consume(Tokenable::TK_SUB, "Expected '-'!")
       end
-      [tk, expr_mul]
+      [tk, expr_mul(true)]
     end
 
     expressions.each do |tk, expression|
@@ -341,15 +341,15 @@ module Rules
 
   # exprMul: exprMul ( MUL | DIV ) exprCast | exprCast
   # => exprMul: exprCast ( ( ( MUL | DIV ) exprCast )* )?
-  def self.expr_mul
-    lhs         = expr_cast
+  def self.expr_mul(syntax_error = false)
+    lhs         = expr_cast(syntax_error)
     expressions = Parser.parse_many do
       tk = Parser.parse_any -> do
         Parser.consume(Tokenable::TK_MUL, "Expected '*'!")
       end, -> do
         Parser.consume(Tokenable::TK_DIV, "Expected '/'!")
       end
-      [tk, expr_cast]
+      [tk, expr_cast(true)]
     end
 
     expressions.each do |tk, expression|
@@ -364,20 +364,20 @@ module Rules
   end
 
   # exprCast: LPAR typeName RPAR exprCast | exprUnary
-  def self.expr_cast
+  def self.expr_cast(syntax_error = false)
     Parser.parse_any -> do
       Parser.consume(Tokenable::TK_LPAR, "Expected '('!")
       type = type_name
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-      expression = expr_cast
+      expression = expr_cast(true)
       return CastExpression.new(type, expression)
     end, -> do
-      return expr_unary
+      return expr_unary(syntax_error)
     end
   end
 
   # exprUnary: ( SUB | NOT ) exprUnary | exprPostfix
-  def self.expr_unary
+  def self.expr_unary(syntax_error = false)
     Parser.parse_any -> do
       cls = Parser.parse_any -> do
         Parser.consume(Tokenable::TK_SUB, "Expected '-'!")
@@ -386,9 +386,9 @@ module Rules
         Parser.consume(Tokenable::TK_NOT, "Expected '!'!")
         return LogicalNegationExpression
       end
-      cls.new(expr_unary)
+      cls.new(expr_unary(true))
     end, -> do
-      expr_postfix
+      expr_postfix(syntax_error)
     end
   end
 
@@ -396,12 +396,12 @@ module Rules
   #   | exprPostfix DOT ID
   #   | exprPrimary
   # => exprPostfix: exprPrimary ( ( ( LBRACKET expr RBRACKET ) | ( DOT ID ) ) * )?
-  def self.expr_postfix
-    base        = expr_primary
+  def self.expr_postfix(syntax_error = false)
+    base        = expr_primary(syntax_error)
     expressions = Parser.parse_many do
       Parser.parse_any -> do
         tk    = Parser.consume(Tokenable::TK_LBRACKET, "Expected '['!")
-        index = expr
+        index = expr(true)
         Parser.consume(Tokenable::TK_RBRACKET, "Expected ']'!", true)
         return [tk, index]
       end, -> do
@@ -427,42 +427,46 @@ module Rules
   #   | CT_CHAR
   #   | CT_STRING
   #   | LPAR expr RPAR
-  def self.expr_primary
-    Parser.parse_any -> do
-      id = Parser.consume(Tokenable::TK_ID, "Expected identifier!").ct
-      if Parser.consume(Tokenable::TK_LPAR)
-        args         = Array.new
-        first_arg, _ = Parser.parse_maybe do
-          expr
-        end
-        if first_arg
-          args << first_arg
-          args += Parser.parse_many do
-            Parser.consume(Tokenable::TK_COMMA, "Expected ','!")
+  def self.expr_primary(syntax_error = false)
+    begin
+      Parser.parse_any -> do
+        id = Parser.consume(Tokenable::TK_ID, "Expected identifier!").ct
+        if Parser.consume(Tokenable::TK_LPAR)
+          args         = Array.new
+          first_arg, _ = Parser.parse_maybe do
             expr
           end
+          if first_arg
+            args << first_arg
+            args += Parser.parse_many do
+              Parser.consume(Tokenable::TK_COMMA, "Expected ','!")
+              expr
+            end
+          end
+          Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
+          return FunctionCallExpression.new(id, args)
         end
+        return VariableExpression.new(id)
+      end, -> do
+        tk = Parser.consume(Tokenable::TK_CT_INT, "Expected integer constant!")
+        return ConstantExpression.new(tk.ct, INT)
+      end, -> do
+        tk = Parser.consume(Tokenable::TK_CT_REAL, "Expected float constant!")
+        return ConstantExpression.new(tk.ct, FLOAT)
+      end, -> do
+        tk = Parser.consume(Tokenable::TK_CT_CHAR, "Expected char constant!")
+        return ConstantExpression.new(tk.ct, CHAR)
+      end, -> do
+        tk = Parser.consume(Tokenable::TK_CT_STRING, "Expected string constant!")
+        return ConstantExpression.new(tk.ct, CharType.new(true, tk.ct.length + 1))
+      end, -> do
+        Parser.consume(Tokenable::TK_LPAR, "Expected '('!")
+        result = expr
         Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-        return FunctionCallExpression.new(id, args)
+        return result
       end
-      return VariableExpression.new(id)
-    end, -> do
-      tk = Parser.consume(Tokenable::TK_CT_INT, "Expected integer constant!")
-      return ConstantExpression.new(tk.ct, INT)
-    end, -> do
-      tk = Parser.consume(Tokenable::TK_CT_REAL, "Expected float constant!")
-      return ConstantExpression.new(tk.ct, FLOAT)
-    end, -> do
-      tk = Parser.consume(Tokenable::TK_CT_CHAR, "Expected char constant!")
-      return ConstantExpression.new(tk.ct, CHAR)
-    end, -> do
-      tk = Parser.consume(Tokenable::TK_CT_STRING, "Expected string constant!")
-      return ConstantExpression.new(tk.ct, CharType.new(true, tk.ct.length + 1))
-    end, -> do
-      Parser.consume(Tokenable::TK_LPAR, "Expected '('!")
-      result = expr
-      Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-      return result
+    rescue ParserException => e
+      raise ParserSyntaxError.new(e) if syntax_error
     end
   end
 end

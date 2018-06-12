@@ -10,6 +10,7 @@ int		count()
 	for(i=n=0;i<10;i=i+1){
 		if(points[i].x>=0&&points[i].y>=0)n=n+1;
 		}
+		i=;
 	return n;
 }
 

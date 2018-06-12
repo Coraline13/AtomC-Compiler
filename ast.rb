@@ -141,7 +141,7 @@ class BinaryExpression < Expression
     @rhs = rhs
   end
 
-  # TODO: eroare daca lipsesc membrul drept, nu ca astepta paranteza
+  # TODO: eroare daca lipsesc membrul drept, nu ca astepta paranteza cu mesaj
 end
 
 class AssignExpression < BinaryExpression
@@ -250,6 +250,18 @@ class CompoundStatement < Statement
 
   def initialize(components)
     @components = components
+  end
+end
+
+class ExpressionStatement < Statement
+  attr_reader :expr
+
+  def initialize(expr)
+    @expr = expr
+  end
+
+  def to_s
+    return "#{@expr};"
   end
 end
 

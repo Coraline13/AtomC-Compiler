@@ -16,14 +16,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="c" value="44" />
-          <entry key="rb" value="804" />
+          <entry key="c" value="50" />
+          <entry key="rb" value="1442" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="C++" value="44" />
-          <entry key="Ruby" value="804" />
+          <entry key="C++" value="50" />
+          <entry key="Ruby" value="1442" />
         </counts>
       </usages-collector>
     </session>
