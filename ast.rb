@@ -8,6 +8,8 @@ class UnitNode
   def initialize(declarations)
     @declarations = declarations
   end
+
+  # TODO: all to_s methods
 end
 
 class Expression < ASTNode
@@ -138,6 +140,8 @@ class BinaryExpression < Expression
     @lhs = lhs
     @rhs = rhs
   end
+
+  # TODO: eroare daca lipsesc membrul drept, nu ca astepta paranteza
 end
 
 class AssignExpression < BinaryExpression
@@ -246,5 +250,65 @@ class CompoundStatement < Statement
 
   def initialize(components)
     @components = components
+  end
+end
+
+class IfStatement < Statement
+  attr_reader :condition, :if_body, :else_body
+
+  def initialize(condition, if_body, else_body)
+    @condition = condition
+    @if_body   = if_body
+    @else_body = else_body
+  end
+
+  def to_s
+    str = "if(#{@condition}) #{@if_body};"
+    str += "\nelse(#{@else_body};" if @else_body
+    return str
+  end
+end
+
+class WhileStatement < Statement
+  attr_reader :condition, :body
+
+  def initialize(condition, body)
+    @condition = condition
+    @body      = body
+  end
+
+  def to_s
+    return "while(#{@condition}) #{@body};"
+  end
+end
+
+class ForStatement < Statement
+  attr_reader :init, :condition, :increment, :body
+
+  def initialize(init, condition, increment, body)
+    @init      = init
+    @condition = condition
+    @increment = increment
+    @body      = body
+  end
+
+  def to_s
+    return "for(#{@init};#{@condition};#{@increment}) #{@body};"
+  end
+end
+
+class BreakStatement < Statement
+
+end
+
+class ReturnStatement < Statement
+  attr_reader :value
+
+  def initialize(value)
+    @value = value
+  end
+
+  def to_s
+    return "return #{@value};"
   end
 end

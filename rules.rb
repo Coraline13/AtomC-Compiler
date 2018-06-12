@@ -121,9 +121,9 @@ module Rules
 
   # funcArg: typeBase ID arrayDecl?
   def self.func_arg
-    type = type_base
-    name = Parser.consume(Tokenable::TK_ID, "Expected var name!", true)
-    size, is_array = Parser.parse_maybe do
+    type            = type_base
+    name            = Parser.consume(Tokenable::TK_ID, "Expected var name!", true)
+    size, is_array  = Parser.parse_maybe do
       array_decl
     end
     type.is_array   = is_array
@@ -144,44 +144,49 @@ module Rules
     end, -> do
       Parser.consume(Tokenable::TK_IF, "Expected 'if'!")
       Parser.consume(Tokenable::TK_LPAR, "Expected '('!", true)
-      expr
+      condition = expr
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-      stm
-      Parser.parse_maybe do
+      if_body   = stm
+      else_body = Parser.parse_maybe do
         Parser.consume(Tokenable::TK_ELSE, "Expected 'else'!")
         stm
       end
+      return IfStatement.new(condition, if_body, else_body)
     end, -> do
       Parser.consume(Tokenable::TK_WHILE, "Expected 'while'!")
       Parser.consume(Tokenable::TK_LPAR, "Expected '('!", true)
-      expr
+      condition = expr
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-      stm
+      body = stm
+      return WhileStatement.new(condition, body)
     end, -> do
       Parser.consume(Tokenable::TK_FOR, "Expected 'for'!")
       Parser.consume(Tokenable::TK_LPAR, "Expected '('!", true)
-      Parser.parse_maybe do
+      init = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
-      Parser.parse_maybe do
+      condition = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
-      Parser.parse_maybe do
+      increment = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
-      stm
+      body = stm
+      return ForStatement.new(init, condition, increment, body)
     end, -> do
       Parser.consume(Tokenable::TK_BREAK, "Expected 'break'!")
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
+      return BreakStatement.new
     end, -> do
       Parser.consume(Tokenable::TK_RETURN, "Expected 'return'!")
-      Parser.parse_maybe do
+      value = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
+      return ReturnStatement.new(value)
     end, -> do
       expression, _ = Parser.parse_maybe do
         expr
@@ -237,24 +242,6 @@ module Rules
 
     return lhs
   end
-
-  # exprOr1: exprAnd exprOr2
-  # exprOr2: (OR exprAnd exprOr2)?
-
-  # def self.expr_or1
-  #   lhs = expr_and
-  #   rhs = expr_or2
-  #   return OrExpression(lhs, rhs)
-  # end
-  #
-  # def self.expr_or2
-  #   Parser.parse_maybe {
-  #     Parser.consume(Tokenable::TK_OR, "Expected ||!")
-  #     lhs = expr_and
-  #     rhs = expr_or2
-  #     rhs ? OrExpression(lhs, rhs) : lhs
-  #   }
-  # end
 
   # exprAnd: exprAnd AND exprEq | exprEq
   # => exprAnd: exprEq ( ( AND exprEq )* )?
