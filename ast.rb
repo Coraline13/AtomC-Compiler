@@ -1,12 +1,29 @@
+require_relative 'symbols'
+
 class ASTNode
   # AST - abstract syntax tree
+  attr_reader :line, :column
+
+  def initialize(line, column)
+    @line   = line
+    @column = column
+  end
+
+  def validate(symbols, context)
+    raise NotImplementedError
+  end
 end
 
-class UnitNode
+class UnitNode < ASTNode
   attr_reader :declarations
 
-  def initialize(declarations)
+  def initialize(line, column, declarations)
+    super(line, column)
     @declarations = declarations
+  end
+
+  def validate(symbols, context)
+    @declarations.each { |declaration| declaration.validate(symbols, context) }
   end
 
   # TODO: all to_s methods
@@ -29,7 +46,8 @@ end
 class Declaration < ASTNode
   attr_reader :name
 
-  def initialize(name)
+  def initialize(line, column, name)
+    super(line, column)
     @name = name
   end
 end
@@ -41,7 +59,8 @@ end
 class VariableExpression < Expression
   attr_reader :name
 
-  def initialize(name)
+  def initialize(line, column, name)
+    super(line, column)
     @name = name
   end
 
@@ -53,7 +72,8 @@ end
 class ConstantExpression < Expression
   attr_reader :value, :type
 
-  def initialize(value, type)
+  def initialize(line, column, value, type)
+    super(line, column)
     @value = value
     @type  = type
   end
@@ -70,7 +90,8 @@ end
 class CastExpression < Expression
   attr_reader :target_type, :expression
 
-  def initialize(target_type, expression)
+  def initialize(line, column, target_type, expression)
+    super(line, column)
     @target_type = target_type
     @expression  = expression
   end
@@ -83,7 +104,8 @@ end
 class FunctionCallExpression < Expression
   attr_reader :function_name, :args
 
-  def initialize(function_name, args)
+  def initialize(line, column, function_name, args)
+    super(line, column)
     @function_name = function_name
     @args          = args
   end
@@ -97,6 +119,7 @@ class UnaryExpression < Expression
   attr_reader :expression
 
   def initialize(expression)
+    super(expression.line, expression.column)
     @expression = expression
   end
 end
@@ -117,6 +140,7 @@ class ArrayPostfixExpression < PostfixExpression
   attr_reader :base, :index
 
   def initialize(base, index)
+    super(base.line, base.column)
     @base  = base
     @index = index
   end
@@ -126,6 +150,7 @@ class StructPostfixExpression < PostfixExpression
   attr_reader :struct, :member_name
 
   def initialize(struct, member_name)
+    super(struct.line, struct.column)
     @struct      = struct
     @member_name = member_name
   end
@@ -137,6 +162,7 @@ class BinaryExpression < Expression
   attr_reader :lhs, :rhs
 
   def initialize(lhs, rhs)
+    super(lhs.line, lhs.column)
     @lhs = lhs
     @rhs = rhs
   end
@@ -219,8 +245,8 @@ end
 class StructDeclaration < Declaration
   attr_reader :members
 
-  def initialize(name, members)
-    super(name)
+  def initialize(line, column, name, members)
+    super(line, column, name)
     @members = members
   end
 end
@@ -228,27 +254,41 @@ end
 class VariableDeclaration < Declaration
   attr_reader :type
 
-  def initialize(name, type)
-    super(name)
+  def initialize(line, column, name, type)
+    super(line, column, name)
     @type = type
+  end
+
+  def validate(symbols, context)
+
+
+    symbols.put(@name, self)
   end
 end
 
 class FunctionDeclaration < Declaration
   attr_reader :type, :params, :body
 
-  def initialize(name, type, params, body)
-    super(name)
+  def initialize(line, column, name, type, params, body)
+    super(line, column, name)
     @type   = type
     @params = params
     @body   = body
+  end
+
+  def validate(symbols, context)
+    symbols.put(@name, self)
+    local_symbols = Symbols.new(symbols)
+    @params.each { |param| param.validate(local_symbols, context) }
+    @body.validate(local_symbols, context)
   end
 end
 
 class CompoundStatement < Statement
   attr_reader :components
 
-  def initialize(components)
+  def initialize(line, column, components)
+    super(line, column)
     @components = components
   end
 end
@@ -256,7 +296,8 @@ end
 class ExpressionStatement < Statement
   attr_reader :expr
 
-  def initialize(expr)
+  def initialize(line, column, expr)
+    super(line, column)
     @expr = expr
   end
 
@@ -268,7 +309,8 @@ end
 class IfStatement < Statement
   attr_reader :condition, :if_body, :else_body
 
-  def initialize(condition, if_body, else_body)
+  def initialize(line, column, condition, if_body, else_body)
+    super(line, column)
     @condition = condition
     @if_body   = if_body
     @else_body = else_body
@@ -284,7 +326,8 @@ end
 class WhileStatement < Statement
   attr_reader :condition, :body
 
-  def initialize(condition, body)
+  def initialize(line, column, condition, body)
+    super(line, column)
     @condition = condition
     @body      = body
   end
@@ -297,7 +340,8 @@ end
 class ForStatement < Statement
   attr_reader :init, :condition, :increment, :body
 
-  def initialize(init, condition, increment, body)
+  def initialize(line, column, init, condition, increment, body)
+    super(line, column)
     @init      = init
     @condition = condition
     @increment = increment
@@ -316,7 +360,8 @@ end
 class ReturnStatement < Statement
   attr_reader :value
 
-  def initialize(value)
+  def initialize(line, column, value)
+    super(line, column)
     @value = value
   end
 

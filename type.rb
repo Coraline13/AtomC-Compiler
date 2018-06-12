@@ -7,7 +7,13 @@ class Type
   end
 
   def array_to_s
-    is_array ? "[#{array_size}]" : ""
+    @is_array ? "[#{@array_size}]" : ""
+  end
+
+  def validate(symbols, context)
+    if @is_array && @array_size
+      raise TypeException.new("Array size must be a constant expression!") unless @array_size.const?
+    end
   end
 end
 
@@ -58,4 +64,13 @@ class StructType < Type
   def to_s
     return "struct#{array_to_s}"
   end
+
+  def validate(symbols, context)
+    struct_node = symbols.get(@struct_name)
+    raise TypeException.new("#{@struct_name} is not a struct!") unless struct_node.instance_of?(StructDeclaration)
+  end
+end
+
+class TypeException < Exception
+
 end
