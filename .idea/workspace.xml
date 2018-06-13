@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eff0781c-2eff-459c-8940-9b802033824a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Cora.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Cora.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/usage.statistics.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/usage.statistics.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ast.rb" beforeDir="false" afterPath="$PROJECT_DIR$/ast.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/type.rb" beforeDir="false" afterPath="$PROJECT_DIR$/type.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,7 +18,7 @@
     <SUITE FILE_PATH="coverage/AtomC_Compiler@token_type.rcov" NAME="token_type Coverage Results" MODIFIED="1525737833861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@ast_node.rcov" NAME="ast_node Coverage Results" MODIFIED="1527033368159" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@IRB_console__AtomC_Compiler.rcov" NAME="IRB console: AtomC-Compiler Coverage Results" MODIFIED="1527385218510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
-    <SUITE FILE_PATH="coverage/AtomC_Compiler@atom_c.rcov" NAME="atom_c Coverage Results" MODIFIED="1528883272082" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
+    <SUITE FILE_PATH="coverage/AtomC_Compiler@atom_c.rcov" NAME="atom_c Coverage Results" MODIFIED="1528886337737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@lexer.rcov" NAME="lexer Coverage Results" MODIFIED="1527024140807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@alex.rcov" NAME="alex Coverage Results" MODIFIED="1525969426134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
   </component>
@@ -38,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ast.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1889">
-              <caret line="576" column="18" selection-start-line="576" selection-start-column="18" selection-end-line="576" selection-end-column="18" />
+            <state relative-caret-position="263">
+              <caret line="286" column="42" selection-start-line="286" selection-start-column="42" selection-end-line="286" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -47,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/type.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1301">
-              <caret line="141" column="5" selection-start-line="141" selection-start-column="5" selection-end-line="141" selection-end-column="5" />
+            <state relative-caret-position="301">
+              <caret line="98" column="49" selection-start-line="98" selection-start-column="49" selection-end-line="98" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -56,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rules.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5069">
-              <caret line="208" column="50" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
+            <state relative-caret-position="102">
+              <caret line="212" column="17" selection-start-line="212" selection-start-column="14" selection-end-line="212" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -65,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/parser.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="56" column="11" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
+            <state relative-caret-position="217">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
         </entry>
@@ -74,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/parser_exception.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+            <state relative-caret-position="105">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -83,8 +81,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/symbols.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+            <state relative-caret-position="315">
+              <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -101,8 +99,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+            <state relative-caret-position="126">
+              <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -119,12 +117,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.put</find>
-      <find>.get</find>
-      <find>functioncall</find>
-      <find>structde</find>
-      <find>decl_var</find>
-      <find>clone</find>
       <find>structt</find>
       <find>Structdecl</find>
       <find>arithmeticex</find>
@@ -146,9 +138,15 @@
       <find>che</find>
       <find>check_same_as</find>
       <find>check</find>
-      <find>dup</find>
       <find>state</find>
       <find>Symbols.new</find>
+      <find>dup</find>
+      <find>assi</find>
+      <find>local_symbols</find>
+      <find>local_symbol</find>
+      <find>bi</find>
+      <find>var</find>
+      <find>ass</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -373,12 +371,12 @@
       <workItem from="1527549323773" duration="21250000" />
       <workItem from="1528219222195" duration="83000" />
       <workItem from="1528219440700" duration="1361000" />
-      <workItem from="1528806615238" duration="29838000" />
+      <workItem from="1528806615238" duration="32800000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="200093000" />
+    <option name="totallyTimeSpent" value="203055000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -398,7 +396,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32819724" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49923313" visible="true" weight="0.35747305" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49923313" weight="0.35747305" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.40677965" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -413,6 +411,27 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
     </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13492064" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32819724" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49923313" weight="0.35747305" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.40677965" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32973805" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32884902" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5007669" side_tool="true" weight="0.5605381" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -423,15 +442,15 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <breakpoint enabled="true" type="ruby-exception">
+        <breakpoint type="ruby-exception">
           <properties exception="SymbolException" />
           <option name="timeStamp" value="4" />
         </breakpoint>
-        <breakpoint enabled="true" type="ruby-exception">
+        <breakpoint type="ruby-exception">
           <properties exception="NotImplementedError" />
           <option name="timeStamp" value="7" />
         </breakpoint>
-        <breakpoint enabled="true" type="ruby-exception">
+        <breakpoint type="ruby-exception">
           <properties exception="TypeException" />
           <option name="timeStamp" value="16" />
         </breakpoint>
@@ -586,13 +605,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parser.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="56" column="11" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/0.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
@@ -607,31 +619,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parser_exception.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/symbols.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/type.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1301">
-          <caret line="141" column="5" selection-start-line="141" selection-start-column="5" selection-end-line="141" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rules.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5069">
-          <caret line="208" column="50" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
+        <state relative-caret-position="315">
+          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -642,24 +633,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/parser.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/parser_exception.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rules.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="212" column="17" selection-start-line="212" selection-start-column="14" selection-end-line="212" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/did_you_mean-1.2.0/lib/did_you_mean/core_ext/name_error.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/type.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="98" column="49" selection-start-line="98" selection-start-column="49" selection-end-line="98" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ast.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1889">
-          <caret line="576" column="18" selection-start-line="576" selection-start-column="18" selection-end-line="576" selection-end-column="18" />
+        <state relative-caret-position="263">
+          <caret line="286" column="42" selection-start-line="286" selection-start-column="42" selection-end-line="286" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/9.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" lean-forward="true" selection-end-line="19" />
+        <state relative-caret-position="203">
+          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        <state relative-caret-position="126">
+          <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
         </state>
       </provider>
     </entry>

@@ -82,6 +82,7 @@ class VariableExpression < Expression
 
   def validate(symbols, context)
     @decl = symbols.get(@name, @line, @column)
+    raise TypeException.new("Not a variable declaration!", @line, @column) unless @decl.is_a?(VariableDeclaration)
   end
 end
 
@@ -283,6 +284,7 @@ class BinaryExpression < Expression
   def validate(symbols, context)
     @lhs.validate(symbols, context)
     @rhs.validate(symbols, context)
+    check_implicit_cast(rhs.type, lhs.type, @line, @column)
   end
 
   # TODO: eroare daca lipsesc membrul drept, nu ca astepta paranteza cu mesaj
