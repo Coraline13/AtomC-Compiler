@@ -14,6 +14,7 @@ int		count()
 	return n;
 }
 
+
 void main()
 {
 	put_i(count());

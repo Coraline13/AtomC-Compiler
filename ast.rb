@@ -41,6 +41,10 @@ class Expression < ASTNode
   def const?
     return false
   end
+
+  def const_val
+    raise TypeException.new("Not a const value!", @line, @column) unless const?
+  end
 end
 
 class Declaration < ASTNode
@@ -64,26 +68,50 @@ class VariableExpression < Expression
     @name = name
   end
 
+  def type
+    return @decl.type
+  end
+
+  def lval?
+    return true
+  end
+
   def to_s
     "var: #{@name}"
+  end
+
+  def validate(symbols, context)
+    @decl = symbols.get(@name, @line, @column)
   end
 end
 
 class ConstantExpression < Expression
-  attr_reader :value, :type
+  attr_reader :value, :constant_type
 
-  def initialize(line, column, value, type)
+  def initialize(line, column, value, constant_type)
     super(line, column)
-    @value = value
-    @type  = type
+    @value         = value
+    @constant_type = constant_type
+  end
+
+  def type
+    return @constant_type
   end
 
   def const?
     return true
   end
 
+  def const_val
+    return @value
+  end
+
+  def validate(symbols, context)
+    # always valid
+  end
+
   def to_s
-    return "#{@type}:#{@value}"
+    return "#{@constant_type}:#{@value}"
   end
 end
 
@@ -96,8 +124,27 @@ class CastExpression < Expression
     @expression  = expression
   end
 
+  def type
+    return @target_type
+  end
+
+  def const?
+    return @expression.const?
+  end
+
+  def const_val
+    super
+    return const_cast(@expression.const_val, @expression.type, @target_type, @line, @column)
+  end
+
   def to_s
     return "(#{@target_type})#{@expression}"
+  end
+
+  def validate(symbols, context)
+    @expression.validate(symbols, context)
+    @target_type.validate(@line, @column, symbols, context)
+    check_explicit_cast(@expression.type, @target_type, @line, @column)
   end
 end
 
@@ -110,8 +157,21 @@ class FunctionCallExpression < Expression
     @args          = args
   end
 
+  def type
+    return @decl.type
+  end
+
   def to_s
     return "#{@function_name}(#{args.join(", ")})"
+  end
+
+  def validate(symbols, context)
+    @decl = symbols.get(@function_name, @line, @column)
+    raise SymbolException.new("Arg count mismatch!", @line, @column) unless @args.size == @decl.params.size
+    @args.each_with_index do |arg, index|
+      arg.validate(symbols, context)
+      check_implicit_cast(arg.type, @decl.params[index].type, @line, @column)
+    end
   end
 end
 
@@ -122,18 +182,43 @@ class UnaryExpression < Expression
     super(expression.line, expression.column)
     @expression = expression
   end
+
+  def const?
+    return @expression.const?
+  end
+
+  def validate(symbols, context)
+    @expression.validate(symbols, context)
+    check_arithmetic_type(@expression.type, @line, @column)
+  end
 end
 
 class LogicalNegationExpression < UnaryExpression
+  def type
+    return INT
+  end
 
+  def const_val
+    super
+    return @expression.const_val == 0 ? 1 : 0
+  end
 end
 
 class ArithmeticNegationExpression < UnaryExpression
+  def type
+    return @expression.type
+  end
 
+  def const_val
+    super
+    return -@expression.const_val
+  end
 end
 
 class PostfixExpression < Expression
-
+  def lval?
+    return true
+  end
 end
 
 class ArrayPostfixExpression < PostfixExpression
@@ -144,6 +229,17 @@ class ArrayPostfixExpression < PostfixExpression
     @base  = base
     @index = index
   end
+
+  def type
+    return @base.type.as_array(false, nil)
+  end
+
+  def validate(symbols, context)
+    @base.validate(symbols, context)
+    @index.validate(symbols, context)
+    raise TypeException.new("Array index must be integer!", @line, @column) unless @index.type.is_a?(IntegerType)
+    raise TypeException.new("Brackets require array!", @line, @column) unless @base.type.is_array
+  end
 end
 
 class StructPostfixExpression < PostfixExpression
@@ -153,6 +249,19 @@ class StructPostfixExpression < PostfixExpression
     super(struct.line, struct.column)
     @struct      = struct
     @member_name = member_name
+  end
+
+  def type
+    struct_type = @struct.type
+    struct_decl = struct_type.struct_decl
+    member_decl = struct_decl.symbols.get(@member_name, @line, @column)
+    return member_decl.type
+  end
+
+  def validate(symbols, context)
+    @struct.validate(symbols, context)
+    raise TypeException.new("Dot requires struct!", @line, @column) unless @struct.type.is_a?(StructType)
+    type
   end
 end
 
@@ -167,87 +276,149 @@ class BinaryExpression < Expression
     @rhs = rhs
   end
 
+  def const?
+    return lhs.const? && rhs.const?
+  end
+
+  def validate(symbols, context)
+    @lhs.validate(symbols, context)
+    @rhs.validate(symbols, context)
+  end
+
   # TODO: eroare daca lipsesc membrul drept, nu ca astepta paranteza cu mesaj
 end
 
 class AssignExpression < BinaryExpression
+  def type
+    return @lhs.type
+  end
+
+  def validate(symbols, context)
+    super
+    raise TypeException.new("Non lval on left hand side of assignment operator!", @line, @column) unless @lhs.lval?
+  end
+end
+
+class LogicalExpression < BinaryExpression
+  def type
+    return INT
+  end
+
+  def validate(symbols, context)
+    super
+    check_arithmetic_type(@lhs.type, @line, @column)
+    check_arithmetic_type(@rhs.type, @line, @column)
+  end
+end
+
+class OrExpression < LogicalExpression
 
 end
 
-class OrExpression < BinaryExpression
+class AndExpression < LogicalExpression
 
 end
 
-class AndExpression < BinaryExpression
-
-end
-
-class EqualExpression < BinaryExpression
+class EqualExpression < LogicalExpression
   def to_s
     return "#{lhs}==#{rhs}"
   end
 end
 
-class NoteqExpression < BinaryExpression
+class NoteqExpression < LogicalExpression
   def to_s
     return "#{lhs}!=#{rhs}"
   end
 end
 
-class LessExpression < BinaryExpression
+class LessExpression < LogicalExpression
   def to_s
     return "#{lhs}<#{rhs}"
   end
 end
 
-class LesseqExpression < BinaryExpression
+class LesseqExpression < LogicalExpression
   def to_s
     return "#{lhs}<=#{rhs}"
   end
 end
 
-class GreaterExpression < BinaryExpression
+class GreaterExpression < LogicalExpression
   def to_s
     return "#{lhs}>#{rhs}"
   end
 end
 
-class GreatereqExpression < BinaryExpression
+class GreatereqExpression < LogicalExpression
   def to_s
     return "#{lhs}>=#{rhs}"
   end
 end
 
-class AddExpression < BinaryExpression
+class ArithmeticExpression < BinaryExpression
+  def type
+    return larger_type(@lhs.type, @rhs.type, @line, @column)
+  end
+
+  def validate(symbols, context)
+    super
+    check_arithmetic_type(@lhs.type, @line, @column)
+    check_arithmetic_type(@rhs.type, @line, @column)
+  end
+end
+
+class AddExpression < ArithmeticExpression
   def to_s
     return "#{lhs}+#{rhs}"
   end
+
+  def const_val
+    return lhs.const_val + rhs.const_val
+  end
 end
 
-class SubExpression < BinaryExpression
+class SubExpression < ArithmeticExpression
   def to_s
     return "#{lhs}-#{rhs}"
   end
-end
 
-class MulExpression < BinaryExpression
-  def to_s
-    return "#{lhs}*#{rhs}"
+  def const_val
+    return lhs.const_val - rhs.const_val
   end
 end
 
-class DivExpression < BinaryExpression
+class MulExpression < ArithmeticExpression
+  def to_s
+    return "#{lhs}*#{rhs}"
+  end
+
+  def const_val
+    return lhs.const_val * rhs.const_val
+  end
+end
+
+class DivExpression < ArithmeticExpression
   def to_s
     return "#{lhs}/#{rhs}"
+  end
+
+  def const_val
+    return lhs.const_val / rhs.const_val # TODO: float or int
   end
 end
 
 class StructDeclaration < Declaration
-  attr_reader :members
+  attr_reader :members, :symbols
 
   def initialize(line, column, name, members)
     super(line, column, name)
     @members = members
+  end
+
+  def validate(symbols, context)
+    @symbols = Symbols.new(symbols)
+    @members.each { |member| member.validate(@symbols, context) }
+    symbols.put(@name, self, @line, @column)
   end
 end
 
@@ -260,9 +431,8 @@ class VariableDeclaration < Declaration
   end
 
   def validate(symbols, context)
-
-
-    symbols.put(@name, self)
+    @type.validate(@line, @column, symbols, context)
+    symbols.put(@name, self, @line, @column)
   end
 end
 
@@ -277,10 +447,15 @@ class FunctionDeclaration < Declaration
   end
 
   def validate(symbols, context)
-    symbols.put(@name, self)
+    @type.validate(@line, @column, symbols, context)
     local_symbols = Symbols.new(symbols)
-    @params.each { |param| param.validate(local_symbols, context) }
+    @params.each do |param|
+      param.validate(local_symbols, context)
+    end
+    context[:in_function] = self
     @body.validate(local_symbols, context)
+    context.delete(:in_function)
+    symbols.put(@name, self, @line, @column)
   end
 end
 
@@ -290,6 +465,12 @@ class CompoundStatement < Statement
   def initialize(line, column, components)
     super(line, column)
     @components = components
+  end
+
+  def validate(symbols, context)
+    @components.each do |component|
+      component.validate(symbols, context)
+    end
   end
 end
 
@@ -303,6 +484,10 @@ class ExpressionStatement < Statement
 
   def to_s
     return "#{@expr};"
+  end
+
+  def validate(symbols, context)
+    @expr.validate(symbols, context) if @expr
   end
 end
 
@@ -321,6 +506,13 @@ class IfStatement < Statement
     str += "\nelse(#{@else_body};" if @else_body
     return str
   end
+
+  def validate(symbols, context)
+    @condition.validate(symbols, context)
+    @if_body.validate(symbols, context)
+    @else_body.validate(symbols, context) if @else_body
+    check_arithmetic_type(@condition.type, @line, @column)
+  end
 end
 
 class WhileStatement < Statement
@@ -334,6 +526,14 @@ class WhileStatement < Statement
 
   def to_s
     return "while(#{@condition}) #{@body};"
+  end
+
+  def validate(symbols, context)
+    @condition.validate(symbols, context)
+    context[:loop_level].nil? ? context[:loop_level] = 1 : context[:loop_level] += 1
+    @body.validate(symbols, context)
+    context[:loop_level] -= 1
+    check_arithmetic_type(@condition.type, @line, @column)
   end
 end
 
@@ -351,10 +551,22 @@ class ForStatement < Statement
   def to_s
     return "for(#{@init};#{@condition};#{@increment}) #{@body};"
   end
+
+  def validate(symbols, context)
+    @init.validate(symbols, context) if @init
+    @condition.validate(symbols, context) if @condition
+    @increment.validate(symbols, context) if @increment
+    context[:loop_level].nil? ? context[:loop_level] = 1 : context[:loop_level] += 1
+    @body.validate(symbols, context)
+    context[:loop_level] -= 1
+    check_arithmetic_type(@condition.type, @line, @column) if @condition
+  end
 end
 
 class BreakStatement < Statement
-
+  def validate(symbols, context)
+    raise SymbolException.new("Break outside loop!", @line, @column) unless context.has_key?(:loop_level) && context[:loop_level] > 0
+  end
 end
 
 class ReturnStatement < Statement
@@ -367,5 +579,18 @@ class ReturnStatement < Statement
 
   def to_s
     return "return #{@value};"
+  end
+
+  def validate(symbols, context)
+    @value.validate(symbols, context) if @value
+    raise SymbolException.new("Return outside function!", @line, @column) unless context.has_key?(:in_function)
+    func_decl = context[:in_function]
+    if func_decl.type.is_a?(VoidType) && !@value.nil?
+      raise TypeException.new("Non-void return from void function!", @line, @column)
+    end
+    if !func_decl.type.is_a?(VoidType) && @value.nil?
+      raise TypeException.new("Void return from non-void function!", @line, @column)
+    end
+    check_implicit_cast(@value.type, func_decl.type, @line, @column)
   end
 end

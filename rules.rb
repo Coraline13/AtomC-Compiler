@@ -5,15 +5,15 @@ module Rules
   def self.unit
     declarations = Parser.parse_many(false) do
       Parser.parse_any -> do
-        decl_struct
+        [decl_struct]
       end, -> do
-        decl_func
+        [decl_func]
       end, -> do
         decl_var
       end
     end
     Parser.consume(Tokenable::TK_END, "Expected end of file!")
-    return UnitNode.new(1, 1, declarations)
+    return UnitNode.new(1, 1, declarations.flatten(1))
   end
 
   # declStruct: STRUCT ID LACC declVar* RACC SEMICOLON
@@ -26,7 +26,7 @@ module Rules
     end
     Parser.consume(Tokenable::TK_RACC, "Expected '}'!", true)
     Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
-    return StructDeclaration.new(tk.line, tk.column, name, members)
+    return StructDeclaration.new(tk.line, tk.column, name.ct, members.flatten(1))
   end
 
   # declVar:  typeBase ID arrayDecl? ( COMMA ID arrayDecl? )* SEMICOLON
@@ -37,14 +37,14 @@ module Rules
     size, is_array = Parser.parse_maybe do
       array_decl
     end
-    vars << VariableDeclaration.new(name.line, name.column, name, type.class.new(is_array, size))
+    vars << VariableDeclaration.new(name.line, name.column, name.ct, type.as_array(is_array, size))
     Parser.parse_many do
       Parser.consume(Tokenable::TK_COMMA, "Expected ','!")
       name           = Parser.consume(Tokenable::TK_ID, "Expected var name!", true)
       size, is_array = Parser.parse_maybe do
         array_decl
       end
-      vars << VariableDeclaration.new(name.line, name.column, name, type.class.new(is_array, size))
+      vars << VariableDeclaration.new(name.line, name.column, name.ct, type.as_array(is_array, size))
     end
     Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
     return vars
@@ -64,7 +64,7 @@ module Rules
     end, -> do
       Parser.consume(Tokenable::TK_STRUCT, "Expected 'struct'!")
       name = Parser.consume(Tokenable::TK_ID, "Expected struct name!", true)
-      return StructType.new(name, false)
+      return StructType.new(name.ct, false)
     end
   end
 
@@ -97,8 +97,8 @@ module Rules
       type = type_base
       Parser.parse_maybe do
         Parser.consume(Tokenable::TK_MUL, "Expected '*'!")
+        type.is_array = true
       end
-      type.is_array = true
       return type
     end, -> do
       Parser.consume(Tokenable::TK_VOID, "Expected 'void'!")
@@ -116,7 +116,7 @@ module Rules
     end
     Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
     body = stm_compound
-    return FunctionDeclaration.new(name.line, name.column, name, type, params, body)
+    return FunctionDeclaration.new(name.line, name.column, name.ct, type, params, body)
   end
 
   # funcArg: typeBase ID arrayDecl?
@@ -128,7 +128,7 @@ module Rules
     end
     type.is_array   = is_array
     type.array_size = size
-    return VariableDeclaration.new(name.line, name.column, name, type)
+    return VariableDeclaration.new(name.line, name.column, name.ct, type)
   end
 
   # stm: stmCompound
@@ -147,7 +147,7 @@ module Rules
       condition = expr
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
       if_body   = stm
-      else_body = Parser.parse_maybe do
+      else_body, _ = Parser.parse_maybe do
         Parser.consume(Tokenable::TK_ELSE, "Expected 'else'!")
         stm
       end
@@ -162,15 +162,15 @@ module Rules
     end, -> do
       tk = Parser.consume(Tokenable::TK_FOR, "Expected 'for'!")
       Parser.consume(Tokenable::TK_LPAR, "Expected '('!", true)
-      init = Parser.parse_maybe do
+      init, _ = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
-      condition = Parser.parse_maybe do
+      condition, _ = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
-      increment = Parser.parse_maybe do
+      increment, _ = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_RPAR, "Expected ')'!", true)
@@ -182,7 +182,7 @@ module Rules
       return BreakStatement.new(tk.line, tk.column)
     end, -> do
       tk    = Parser.consume(Tokenable::TK_RETURN, "Expected 'return'!")
-      value = Parser.parse_maybe do
+      value, _ = Parser.parse_maybe do
         expr
       end
       Parser.consume(Tokenable::TK_SEMICOLON, "Expected ';'!", true)
@@ -203,11 +203,11 @@ module Rules
       Parser.parse_any -> do
         decl_var
       end, -> do
-        stm
+        [stm]
       end
     end
     Parser.consume(Tokenable::TK_RACC, "Expected '}'!", true)
-    return CompoundStatement.new(tk.line, tk.column, components)
+    return CompoundStatement.new(tk.line, tk.column, components.flatten(1))
   end
 
   # expr: exprAssign
