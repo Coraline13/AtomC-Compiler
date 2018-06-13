@@ -488,8 +488,7 @@ class ExpressionStatement < Statement
   end
 
   def validate(symbols, context)
-    local_symbols = Symbols.new(symbols)
-    @expr.validate(local_symbols, context) if @expr
+    @expr.validate(symbols, context) if @expr
   end
 end
 
@@ -510,10 +509,9 @@ class IfStatement < Statement
   end
 
   def validate(symbols, context)
-    local_symbols = Symbols.new(symbols)
-    @condition.validate(local_symbols, context)
-    @if_body.validate(local_symbols, context)
-    @else_body.validate(local_symbols, context) if @else_body
+    @condition.validate(symbols, context)
+    @if_body.validate(symbols, context)
+    @else_body.validate(symbols, context) if @else_body
     check_arithmetic_type(@condition.type, @line, @column)
   end
 end
@@ -532,10 +530,9 @@ class WhileStatement < Statement
   end
 
   def validate(symbols, context)
-    local_symbols = Symbols.new(symbols)
-    @condition.validate(local_symbols, context)
+    @condition.validate(symbols, context)
     context[:loop_level].nil? ? context[:loop_level] = 1 : context[:loop_level] += 1
-    @body.validate(local_symbols, context)
+    @body.validate(symbols, context)
     context[:loop_level] -= 1
     check_arithmetic_type(@condition.type, @line, @column)
   end
@@ -557,12 +554,11 @@ class ForStatement < Statement
   end
 
   def validate(symbols, context)
-    local_symbols = Symbols.new(symbols)
-    @init.validate(local_symbols, context) if @init
-    @condition.validate(local_symbols, context) if @condition
-    @increment.validate(local_symbols, context) if @increment
+    @init.validate(symbols, context) if @init
+    @condition.validate(symbols, context) if @condition
+    @increment.validate(symbols, context) if @increment
     context[:loop_level].nil? ? context[:loop_level] = 1 : context[:loop_level] += 1
-    @body.validate(local_symbols, context)
+    @body.validate(symbols, context)
     context[:loop_level] -= 1
     check_arithmetic_type(@condition.type, @line, @column) if @condition
   end
