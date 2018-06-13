@@ -13,6 +13,7 @@
       <w>noteq</w>
       <w>rbracket</w>
       <w>tokenable</w>
+      <w>unsized</w>
     </words>
   </dictionary>
 </component>

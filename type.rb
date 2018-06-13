@@ -140,8 +140,6 @@ class StructType < Type
     super
     raise TypeException.new("Different struct types (#{@struct_name}, #{other.struct_name})!", line, column) unless @struct_name == other.struct_name
   end
-
-
 end
 
 class TypeException < Exception

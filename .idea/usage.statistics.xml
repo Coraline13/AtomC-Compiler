@@ -4,26 +4,26 @@
     <session id="-80505195">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="c" value="21" />
+          <entry key="c" value="24" />
           <entry key="rb" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="C++" value="21" />
+          <entry key="C++" value="24" />
           <entry key="Ruby" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="c" value="209" />
-          <entry key="rb" value="10589" />
+          <entry key="c" value="258" />
+          <entry key="rb" value="10682" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="C++" value="209" />
-          <entry key="Ruby" value="10589" />
+          <entry key="C++" value="258" />
+          <entry key="Ruby" value="10682" />
         </counts>
       </usages-collector>
     </session>
