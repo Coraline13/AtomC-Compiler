@@ -1,4 +1,4 @@
-require_relative 'tokenable'
+require_relative '../lexer/tokenable'
 require_relative 'ast'
 require_relative 'rules'
 require_relative 'parser_exception'

@@ -1,5 +1,5 @@
 module Builtin
-  def add_builtin(globals, name, return_type, param_types)
+  def self.add_builtin(globals, name, return_type, param_types)
     params = param_types.map do |param_name, param_type|
       VariableDeclaration.new(-1, -1, param_name, param_type)
     end
@@ -9,7 +9,7 @@ module Builtin
     globals.put(name, decl, -1, -1)
   end
 
-  def add_builtin_functions(globals)
+  def self.add_builtin_functions(globals)
     # void put_s(char s[]): prints the given string
     add_builtin(globals, "put_s", VoidType.new, [["s", CharType.new(true)]])
 
