@@ -1,7 +1,24 @@
-class DataStack < Stack
+class Stack
+  def initialize
+    @data = []
+  end
 
-end
+  def push(value)
+    @data.push(value)
+  end
 
-class CallStack < Stack
+  alias_method :"<<", :push
 
+  def pop
+    raise "Stack is empty" if is_empty?
+    @data.pop
+  end
+
+  def is_empty?
+    @data.length == 0
+  end
+
+  def print
+    puts("stack: #{@data}")
+  end
 end

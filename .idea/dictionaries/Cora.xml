@@ -4,14 +4,22 @@
       <w>abcdef</w>
       <w>abcdefghijklmnopqrstuvwxyz</w>
       <w>abfnrtv</w>
+      <w>callext</w>
       <w>greatereq</w>
       <w>hexa</w>
       <w>lacc</w>
       <w>lbracket</w>
+      <w>leafp</w>
       <w>lesseq</w>
       <w>lval</w>
       <w>noteq</w>
+      <w>popa</w>
+      <w>popd</w>
+      <w>pusha</w>
+      <w>pushct</w>
+      <w>pushd</w>
       <w>rbracket</w>
+      <w>retfp</w>
       <w>tokenable</w>
       <w>unsized</w>
     </words>
