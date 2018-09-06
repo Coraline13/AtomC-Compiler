@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eff0781c-2eff-459c-8940-9b802033824a" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/runtime/instructions.rb" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/instructions.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime/stack.rb" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/stack.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/runtime/virtual_machine.rb" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/virtual_machine.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -12,12 +13,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/AtomC_Compiler@virtual_machine.rcov" NAME="virtual_machine Coverage Results" MODIFIED="1536194443123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/runtime" MODULE_NAME="AtomC-Compiler" />
+    <SUITE FILE_PATH="coverage/AtomC_Compiler@virtual_machine.rcov" NAME="virtual_machine Coverage Results" MODIFIED="1536212722776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/runtime" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@token.rcov" NAME="token Coverage Results" MODIFIED="1522947918337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@token_type.rcov" NAME="token_type Coverage Results" MODIFIED="1525737833861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@ast_node.rcov" NAME="ast_node Coverage Results" MODIFIED="1527033368159" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
-    <SUITE FILE_PATH="coverage/AtomC_Compiler@IRB_console__AtomC_Compiler.rcov" NAME="IRB console: AtomC-Compiler Coverage Results" MODIFIED="1527385218510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@atom_c.rcov" NAME="atom_c Coverage Results" MODIFIED="1536090418006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
+    <SUITE FILE_PATH="coverage/AtomC_Compiler@IRB_console__AtomC_Compiler.rcov" NAME="IRB console: AtomC-Compiler Coverage Results" MODIFIED="1536213689303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@lexer.rcov" NAME="lexer Coverage Results" MODIFIED="1527024140807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
     <SUITE FILE_PATH="coverage/AtomC_Compiler@alex.rcov" NAME="alex Coverage Results" MODIFIED="1525969426134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="AtomC-Compiler" />
   </component>
@@ -35,23 +36,24 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="c" value="1" />
-          <entry key="rb" value="4" />
+          <entry key="rb" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="C++" value="1" />
-          <entry key="Ruby" value="4" />
+          <entry key="Ruby" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="rb" value="3153" />
+          <entry key="Ruby Console" value="71" />
+          <entry key="rb" value="4877" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ruby" value="3153" />
+          <entry key="Ruby" value="4948" />
         </counts>
       </usages-collector>
     </session>
@@ -61,26 +63,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/runtime/stack.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/runtime/virtual_machine.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="27" column="67" selection-start-line="27" selection-start-column="67" selection-end-line="27" selection-end-column="67" />
+            <state relative-caret-position="336">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/runtime/virtual_machine.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-239">
+              <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/runtime/instructions.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="191" column="3" lean-forward="true" selection-start-line="191" selection-start-column="3" selection-end-line="191" selection-end-column="3" />
+            <state relative-caret-position="1630">
+              <caret line="449" column="20" selection-start-line="449" selection-start-column="20" selection-end-line="449" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/runtime/builtin.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -97,10 +108,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>arithmeticex</find>
-      <find>compoundst</find>
-      <find>466</find>
-      <find>forsta</find>
       <find>Parser.parse_maybe</find>
       <find>constante</find>
       <find>functiondecl</find>
@@ -127,6 +134,10 @@
       <find>ass</find>
       <find>imple</find>
       <find>vm</find>
+      <find>load</find>
+      <find>jt</find>
+      <find>callext</find>
+      <find>\n</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -258,7 +269,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Ruby.virtual_machine">
+  <component name="RunManager" selected="IRB console.IRB console: AtomC-Compiler">
     <configuration name="IRB console: AtomC-Compiler" type="IrbRunConfigurationType" factoryName="IRB console" temporary="true">
       <module name="AtomC-Compiler" />
       <IRB_RUN_CONFIG NAME="RUBY_ARGS" VALUE="" />
@@ -339,11 +350,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="IRB console.IRB console: AtomC-Compiler" />
         <item itemvalue="Ruby.virtual_machine" />
+        <item itemvalue="IRB console.IRB console: AtomC-Compiler" />
+        <item itemvalue="IRB console.IRB console: AtomC-Compiler" />
         <item itemvalue="Ruby.atom_c" />
-        <item itemvalue="IRB console.IRB console: AtomC-Compiler" />
-        <item itemvalue="Ruby.lexer" />
-        <item itemvalue="IRB console.IRB console: AtomC-Compiler" />
       </list>
     </recent_temporary>
   </component>
@@ -381,12 +392,12 @@
       <workItem from="1531344308221" duration="631000" />
       <workItem from="1532174133066" duration="1180000" />
       <workItem from="1536090218680" duration="4620000" />
-      <workItem from="1536177652150" duration="14369000" />
+      <workItem from="1536177652150" duration="25290000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="229711000" />
+    <option name="totallyTimeSpent" value="240632000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -406,7 +417,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32819724" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49923313" weight="0.35747305" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49923313" weight="0.49614793" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.40677965" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -468,6 +479,11 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="ruby-exception">
+          <properties />
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="RubyRunConfigurationType">
@@ -664,13 +680,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runtime/builtin.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/rubystubs25/basic_object.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1086">
@@ -706,24 +715,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runtime/virtual_machine.rb">
+    <entry file="file://$PROJECT_DIR$/runtime/builtin.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="27" column="67" selection-start-line="27" selection-start-column="67" selection-end-line="27" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/runtime/stack.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+        <state relative-caret-position="210">
+          <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/runtime/instructions.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="191" column="3" lean-forward="true" selection-start-line="191" selection-start-column="3" selection-end-line="191" selection-end-column="3" />
+        <state relative-caret-position="1630">
+          <caret line="449" column="20" selection-start-line="449" selection-start-column="20" selection-end-line="449" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runtime/stack.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runtime/virtual_machine.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-239">
+          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
         </state>
       </provider>
     </entry>

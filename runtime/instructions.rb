@@ -201,8 +201,6 @@ class NEG < Instruction
   end
 end
 
-# TODO: pentru chestii cu valoare de adevar, retin pe stiva 0 sau false?
-
 # [a] -> []
 # Daca pe stiva e o valoare adevarata (!= 0), transfera executia la adresa data (IP = addr).
 # Altfel continua executia cu urmatoarea instructiune.
@@ -271,13 +269,22 @@ end
 # [addr] -> [a]
 # Pune pe stiva "a" de n octeti de la adresa "addr" (sizeof(a) = n)
 class LOAD < Instruction
-#TODO
-end
+  attr_reader :n
 
-# TODO: LEAFP?
-# class LEAFP < Instruction
-#
-# end
+  def initialize(n)
+    @n = n
+  end
+
+  def execute(vm)
+    addr   = vm.stack.pop
+    values = vm.stack.read_from(addr, n)
+    values.each do |value|
+      vm.stack.push(value)
+    end
+    puts "LOAD from #{addr}: #{values}"
+    vm.ip += 1
+  end
+end
 
 # [] -> [ct]
 # Depune constanta data ca argument
@@ -305,7 +312,13 @@ class STORE < Instruction
   end
 
   def execute(vm)
-#TODO
+    a = []
+    n.times { a << vm.stack.pop }
+    a.reverse!
+    addr = vm.stack.pop
+    vm.stack.write_at(addr, a)
+    puts "STORE @#{addr}: #{a}"
+    vm.ip += 1
   end
 end
 
@@ -322,6 +335,7 @@ class CALL < Instruction
   def execute(vm)
     vm.stack.push(vm.ip + 1)
     vm.ip = @addr
+    puts "CALL #{@addr}"
   end
 end
 
@@ -335,7 +349,11 @@ class ENTER < Instruction
   end
 
   def execute(vm)
-#TODO
+    vm.stack.push(vm.fp)
+    vm.fp       = vm.stack.sp
+    vm.stack.sp += n
+    puts "ENTER #{vm.fp} #{n}"
+    vm.ip += 1
   end
 end
 
@@ -349,21 +367,38 @@ class DROP < Instruction
   end
 
   def execute(vm)
-#TODO
+    n.times { vm.stack.pop }
+    vm.ip += 1
   end
 end
 
 # [addr, n] -> [addr + n]
 # Aduna la "addr" "n" octeti. "n" trebuie sa fie de tip "int"
 class OFFSET < Instruction
-#TODO
+  def execute(vm)
+    n    = vm.stack.pop
+    addr = vm.stack.pop
+    vm.stack.push(addr + n)
+    vm.ip += 1
+  end
 end
 
 # [a, b] -> [b, a, b]
 # Insereaza (duplica) la SP - i n octeti din varful stivei
 # (sizeof(b) = n, sizeof(a) + sizeof(b) = i)
 class INSERT < Instruction
-#TODO
+  attr_reader :i, :n
+
+  def initialize(i, n)
+    @i = i
+    @n = n
+  end
+
+  def execute(vm)
+    values = vm.stack.read_from(vm.stack.sp - n, n)
+    vm.stack.write_at(vm.stack.sp - i - n, values)
+    vm.ip += 1
+  end
 end
 
 # [args, retAddr, oldFP, locals, retVal] -> [retVal]
@@ -372,7 +407,20 @@ end
 # reface vechea valoare a lui FP (FP = oldFP) si transfera executia la "retAddr" (IP = retAddr)
 # (sizeof(args) = na, sizeof(retVal) = nr)
 class RET < Instruction
-#TODO
+  attr_reader :na
+
+  def initialize(na)
+    @na = na
+  end
+
+  def execute(vm)
+    ret_val     = vm.stack.pop
+    vm.stack.sp = vm.fp
+    vm.fp       = vm.stack.pop
+    vm.ip       = vm.stack.pop
+    na.times { vm.stack.pop }
+    vm.stack.push(ret_val)
+  end
 end
 
 # [arg1, arg2, ..., argn] -> [retValue]
@@ -380,26 +428,36 @@ end
 # Functia trebuie sa fie de forma "void f()".
 # Ea trebuie sa-si preia argumentele de pe stiva si daca e cazul sa depuna valoarea returnata
 class CALLEXT < Instruction
-  attr_reader :addr
+  attr_reader :func
 
-  def initialize(addr)
-    @addr = addr
+  def initialize(func)
+    @func = func
   end
 
   def execute(vm)
-#TODO
+    case func
+    when "put_s"
+      #TODO
+    when "put_i", "put_d", "put_c"
+      val = vm.stack.pop
+      puts "CALLEXT #{@func} #{val}"
+      puts val
+    # when "get_s"
+    # when "get_i"
+    #   input = gets.chomp
+    # when "get_d"
+    # when "get_c"
+    # when "seconds"
+    end
+    vm.ip += 1
   end
 end
-
-# TODO: CAST?
-# class CAST < Instruction
-#
-# end
 
 # Incheie executia MV
 class HALT < Instruction
   def execute(vm)
     vm.stopped = true
+    vm.ip += 1
 
     puts "HALT"
   end
