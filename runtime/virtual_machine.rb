@@ -25,6 +25,6 @@ class VirtualMachine
   end
 end
 
-test = [PUSHCT.new(5), PUSHCT.new(69), ADD.new, HALT.new]
+test = [PUSHCT.new(50), PUSHCT.new(12), DIV.new, PUSHCT.new(4), SUB.new, NOT.new, HALT.new]
 vm = VirtualMachine.new(test)
 vm.run
